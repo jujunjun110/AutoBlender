@@ -7,6 +7,8 @@ name = "pypi"
 "fake-bpy-module-2.93" = "*"
 
 [dev-packages]
+pep8 = "*"
+autopep8 = "*"
 
 [requires]
 python_version = "3.9"
