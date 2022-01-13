@@ -1,4 +1,5 @@
 import sys
+import os
 import bpy
 
 
@@ -9,13 +10,23 @@ def main():
     # print(bpy)
     bpy.ops.import_scene.fbx(filepath=path)
 
-    scene = bpy.context.scene
+    camera = getCamera()
+    print(camera)
 
-    foo_objs = [obj for obj in scene.objects]
+    bpy.ops.render.render()
 
-    for obj in foo_objs:
-        print(obj)
-        print(obj.name)
+    dist = "./res.png"
+    bpy.data.images['Render Result'].save_render(filepath=dist)
+
+
+def getCamera():
+    candidates = [
+        obj for obj in bpy.context.scene.objects if obj.name == "Camera"]
+
+    if len(candidates) == 0:
+        return None
+
+    return candidates[0]
 
 
 if __name__ == "__main__":
