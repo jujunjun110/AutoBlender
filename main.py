@@ -31,10 +31,10 @@ def main() -> None:
 
     camera = getSceneObject("Camera")
 
-    angle_step = 90
+    angle_step = 10
 
     yaw_list = range(0, 360, angle_step)
-    pitch_list = range(0, 360, angle_step)
+    pitch_list = range(0, 180, angle_step)
     pairs = itertools.product(yaw_list, pitch_list)
 
     radius = 10
