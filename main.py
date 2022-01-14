@@ -41,11 +41,11 @@ def main() -> None:
         bpy.data.objects.remove(cube, do_unlink=True)
 
     bpy.ops.import_scene.fbx(filepath=path)
-    bpy.types.RenderSettings.film_transparent = True
+    #bpy.types.RenderSettings.film_transparent = True
 
     camera = get_scene_object("Camera")
 
-    angle_step = 10
+    angle_step = 90
 
     yaw_list = range(0, 360, angle_step)
     pitch_list = range(0, 181, angle_step)
@@ -53,6 +53,7 @@ def main() -> None:
 
     radius = 10
     transforms = [calc_camera_transform(radius, pitch, yaw) for pitch, yaw in pairs]
+    bpy.context.scene.render.film_transparent = True
 
     for index, transform in enumerate(transforms):
         print(f"\nX: {transform.alpha}, Y: {transform.beta} ({index + 1} / {len(transforms)})")
