@@ -1,4 +1,5 @@
 from re import T
+import argparse
 import sys
 import os
 import math
@@ -21,6 +22,18 @@ class Transform:
 
 
 def main() -> None:
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--gender', type=str, choices=['f', 'm'], required=True,
+    #                     help='gender: f->female, m->male')
+    # parser.add_argument('--location', type=str, choices=['i', 'o'], required=True,
+    #                     help='location: i->inside, o->outside')
+
+    # args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
+    # return
+
+    gender = args.gender
+    location = args.location
+
     path = "./assets/shoes.fbx"
 
     cube = get_scene_object("Cube")
