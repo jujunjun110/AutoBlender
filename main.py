@@ -34,7 +34,7 @@ def main() -> None:
     # gender = args.gender
     # location = args.location
 
-    path = "./assets/shoes.fbx"
+    path = "./assets/shoes2.fbx"
 
     cube = get_scene_object("Cube")
     if cube is not None:
@@ -45,7 +45,7 @@ def main() -> None:
 
     camera = get_scene_object("Camera")
 
-    angle_step = 90
+    angle_step = 30
 
     yaw_list = range(0, 360, angle_step)
     pitch_list = range(0, 181, angle_step)
@@ -59,7 +59,7 @@ def main() -> None:
         print(f"\nX: {transform.alpha}, Y: {transform.beta} ({index + 1} / {len(transforms)})")
         render_with_angles(camera, transform)
 
-    os.mkdir(path="./result")
+    os.mkdirs(path="./result", exist_ok=True)
     bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
 
 
