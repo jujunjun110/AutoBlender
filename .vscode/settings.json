@@ -1,0 +1,4 @@
+{
+    "editor.formatOnSave": true,
+    "python.formatting.autopep8Path": ".venv/bin/autopep8"
+}
