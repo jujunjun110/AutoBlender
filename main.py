@@ -10,8 +10,7 @@ def main() -> None:
 
     cube = getSceneObject("Cube")
     if cube is not None:
-        objects = cast(List[Object], bpy.data.objects)
-        objects.remove(cube, do_unlink=True)
+        bpy.data.objects.remove(cube, do_unlink=True)
 
     bpy.ops.import_scene.fbx(filepath=path)
 
