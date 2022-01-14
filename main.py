@@ -4,18 +4,13 @@ import bpy
 
 
 def main():
-    print(sys.version)
     path = "./assets/shoe.fbx"
-    print(path)
-    # print(bpy)
-    bpy.ops.import_scene.fbx(filepath=path)
+
     cube = getSceneObject("Cube")
     if cube is not None:
         bpy.data.objects.remove(cube, do_unlink=True)
 
-    camera = getSceneObject("Camera")
-    print(camera)
-
+    bpy.ops.import_scene.fbx(filepath=path)
     bpy.ops.render.render()
 
     dist = "./res.png"
