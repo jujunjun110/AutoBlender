@@ -31,8 +31,8 @@ def main() -> None:
     # args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
     # return
 
-    gender = args.gender
-    location = args.location
+    # gender = args.gender
+    # location = args.location
 
     path = "./assets/shoes.fbx"
 
