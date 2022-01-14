@@ -27,11 +27,14 @@ def main() -> None:
         bpy.data.objects.remove(cube, do_unlink=True)
 
     bpy.ops.import_scene.fbx(filepath=path)
+    bpy.types.RenderSettings.film_transparent = True
 
     camera = getSceneObject("Camera")
 
-    yaw_list = range(0, 360, 30)
-    pitch_list = range(0, 360, 30)
+    angle_step = 90
+
+    yaw_list = range(0, 360, angle_step)
+    pitch_list = range(0, 360, angle_step)
     pairs = itertools.product(yaw_list, pitch_list)
 
     radius = 10
