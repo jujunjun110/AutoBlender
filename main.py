@@ -9,8 +9,11 @@ def main():
     print(path)
     # print(bpy)
     bpy.ops.import_scene.fbx(filepath=path)
+    cube = getSceneObject("Cube")
+    if cube is not None:
+        bpy.data.objects.remove(cube, do_unlink=True)
 
-    camera = getCamera()
+    camera = getSceneObject("Camera")
     print(camera)
 
     bpy.ops.render.render()
@@ -18,10 +21,12 @@ def main():
     dist = "./res.png"
     bpy.data.images['Render Result'].save_render(filepath=dist)
 
+    bpy.ops.wm.save_mainfile(filepath="./created.blend")
 
-def getCamera():
+
+def getSceneObject(name: str):
     candidates = [
-        obj for obj in bpy.context.scene.objects if obj.name == "Camera"]
+        obj for obj in bpy.context.scene.objects if obj.name == name]
 
     if len(candidates) == 0:
         return None
