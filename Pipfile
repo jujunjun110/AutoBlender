@@ -5,10 +5,12 @@ name = "pypi"
 
 [packages]
 "fake-bpy-module-2.93" = "*"
+mypy = "*"
 
 [dev-packages]
 pep8 = "*"
 autopep8 = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.9"

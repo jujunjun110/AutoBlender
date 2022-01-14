@@ -1,9 +1,12 @@
 import sys
 import os
 import bpy
+from bpy.types import bpy_prop_collection, Object
+from typing import Optional, cast, List
 
 
-def main():
+
+def main()->None:
     path = "./assets/shoe.fbx"
 
     cube = getSceneObject("Cube")
@@ -11,6 +14,7 @@ def main():
         bpy.data.objects.remove(cube, do_unlink=True)
 
     bpy.ops.import_scene.fbx(filepath=path)
+
     bpy.ops.render.render()
 
     dist = "./rendered/res.png"
@@ -19,9 +23,9 @@ def main():
     bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
 
 
-def getSceneObject(name: str):
-    candidates = [
-        obj for obj in bpy.context.scene.objects if obj.name == name]
+def getSceneObject(name: str) -> Optional[Object]:
+    objects =cast(List[Object], bpy.context.scene.objects)
+    candidates = [ obj for obj in objects if obj.name == name]
 
     if len(candidates) == 0:
         return None
