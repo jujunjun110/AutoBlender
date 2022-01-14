@@ -5,18 +5,13 @@ from bpy.types import bpy_prop_collection, Object
 from typing import Optional, cast, List
 
 
-
-def main()->None:
+def main() -> None:
     path = "./assets/shoe.fbx"
 
     cube = getSceneObject("Cube")
     if cube is not None:
-        objects = cast(List[Object],bpy.data.objects)
+        objects = cast(List[Object], bpy.data.objects)
         objects.remove(cube, do_unlink=True)
-
-
-
-
 
     bpy.ops.import_scene.fbx(filepath=path)
 
@@ -29,8 +24,8 @@ def main()->None:
 
 
 def getSceneObject(name: str) -> Optional[Object]:
-    objects =cast(List[Object], bpy.context.scene.objects)
-    candidates = [ obj for obj in objects if obj.name == name]
+    objects = cast(List[Object], bpy.context.scene.objects)
+    candidates = [obj for obj in objects if obj.name == name]
 
     if len(candidates) == 0:
         return None
