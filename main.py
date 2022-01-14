@@ -1,3 +1,4 @@
+from re import T
 import sys
 import os
 import math
@@ -22,27 +23,29 @@ class Transform:
 def main() -> None:
     path = "./assets/shoes.fbx"
 
-    cube = getSceneObject("Cube")
+    cube = get_scene_object("Cube")
     if cube is not None:
         bpy.data.objects.remove(cube, do_unlink=True)
 
     bpy.ops.import_scene.fbx(filepath=path)
     bpy.types.RenderSettings.film_transparent = True
 
-    camera = getSceneObject("Camera")
+    camera = get_scene_object("Camera")
 
     angle_step = 10
 
     yaw_list = range(0, 360, angle_step)
-    pitch_list = range(0, 180, angle_step)
+    pitch_list = range(0, 181, angle_step)
     pairs = itertools.product(yaw_list, pitch_list)
 
     radius = 10
-    transforms = [calcTransform(radius, pitch, yaw) for pitch, yaw in pairs]
+    transforms = [calc_camera_transform(radius, pitch, yaw) for pitch, yaw in pairs]
 
-    for transform in transforms:
+    for index, transform in enumerate(transforms):
+        print(f"\nX: {transform.alpha}, Y: {transform.beta} ({index + 1} / {len(transforms)})")
         render_with_angles(camera, transform)
 
+    os.mkdir(path="./result")
     bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
 
 
@@ -56,16 +59,17 @@ def render_with_angles(camera, transform):
     bpy.data.images['Render Result'].save_render(filepath=dist)
 
 
-def calcTransform(radius: float, alpha: float, beta: float) -> Transform:
-    pos_z = radius * math.cos(math.radians(beta))
+def calc_camera_transform(radius: float, alpha: float, beta: float) -> Transform:
     tmp_l = radius * math.sin(math.radians(beta))
+
     pos_x = tmp_l * math.cos(math.radians(alpha))
     pos_y = tmp_l * math.sin(math.radians(alpha))
+    pos_z = radius * math.cos(math.radians(beta))
 
     return Transform(pos_x, pos_y, pos_z, math.radians(beta), 0, math.radians(90 + alpha), alpha, beta)
 
 
-def getSceneObject(name: str) -> Optional[Object]:
+def get_scene_object(name: str) -> Optional[Object]:
     objects = cast(List[Object], bpy.context.scene.objects)
     candidates = [obj for obj in objects if obj.name == name]
 

@@ -8,3 +8,7 @@ run:
 
 test:
 	pipenv run python -m unittest tests/*
+
+reset:
+	rm -rf result
+	rm -rf rendered
