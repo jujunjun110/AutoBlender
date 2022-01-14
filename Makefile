@@ -5,3 +5,6 @@ init:
 
 run:
 	blender --background --python main.py
+
+test:
+	pipenv run python -m unittest tests/*

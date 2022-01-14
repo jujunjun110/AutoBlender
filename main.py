@@ -8,13 +8,15 @@ from typing import Optional, cast, List
 
 
 class Transform:
-    def __init__(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z):
+    def __init__(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, alpha, beta):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.pos_z = pos_z
         self.rot_x = rot_x
         self.rot_y = rot_y
         self.rot_z = rot_z
+        self.alpha = alpha
+        self.beta = beta
 
 
 def main() -> None:
@@ -45,19 +47,19 @@ def main() -> None:
 
         bpy.ops.render.render()
 
-        dist = f"./rendered/res_x{transform.rot_x}_y{transform.rot_z}.png"
+        dist = f"./rendered/res_x{transform.alpha}_y{transform.beta}.png"
         bpy.data.images['Render Result'].save_render(filepath=dist)
 
     bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
 
 
-def calcTransform(radius: float, pitch: float, yaw: float) -> Transform:
-    tmp = - radius * math.cos(math.radians(pitch))
-    pos_z = - radius * math.sin(math.radians(pitch))
-    pos_x = tmp * math.cos(math.radians(yaw))
-    pos_y = tmp * math.sin(math.radians(yaw))
+def calcTransform(radius: float, alpha: float, beta: float) -> Transform:
+    pos_z = radius * math.cos(math.radians(beta))
+    tmp_l = radius * math.sin(math.radians(beta))
+    pos_x = tmp_l * math.cos(math.radians(alpha))
+    pos_y = tmp_l * math.sin(math.radians(alpha))
 
-    return Transform(pos_x, pos_y, pos_z, math.radians(pitch), 90, math.radians(yaw))
+    return Transform(pos_x, pos_y, pos_z, math.radians(beta), 0, math.radians(90 + alpha), alpha, beta)
 
 
 def getSceneObject(name: str) -> Optional[Object]:
