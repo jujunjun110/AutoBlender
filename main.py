@@ -13,10 +13,10 @@ def main():
     bpy.ops.import_scene.fbx(filepath=path)
     bpy.ops.render.render()
 
-    dist = "./res.png"
+    dist = "./rendered/res.png"
     bpy.data.images['Render Result'].save_render(filepath=dist)
 
-    bpy.ops.wm.save_mainfile(filepath="./created.blend")
+    bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
 
 
 def getSceneObject(name: str):
