@@ -6,9 +6,6 @@ import math
 
 class TestMain(unittest.TestCase):
 
-    def test_sample(self):
-        self.assertEqual(1, 1)
-
     def test_calc(self):
         res = main.calcTransform(4, 0, 0)
         self.assertAlmostEqual(res.pos_x, 0)
