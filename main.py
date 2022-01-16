@@ -21,46 +21,61 @@ class Transform:
         self.beta = beta
 
 
+class ExecutionConfig:
+    def __init__(self, filePath: str, angle_step: int, cam_distance: int):
+        self.filePath = filePath
+        self.angleStep = angle_step
+        self.cam_distance = cam_distance
+
+    @staticmethod
+    def parseArgs():
+        default_path = "./assets/default.fbx"
+        default_angle_step = 90
+        default_cam_distance = 10
+
+        parser = argparse.ArgumentParser()
+
+        parser.add_argument('--file', type=str,  required=False, help="path of fbx file")
+        parser.add_argument('--angleStep', type=int,  required=False, help="angle step for rotation")
+        parser.add_argument('--camDistance', type=int,  required=False, help="camera distance")
+
+        args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
+
+        angle_step = default_angle_step if args.angleStep is None else args.angleStep
+        file_path = default_path if args.file is None else args.file
+        cam_distance = default_cam_distance if args.camDistance is None else args.camDistance
+
+        return ExecutionConfig(file_path, angle_step, cam_distance)
+
+
 def main() -> None:
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--gender', type=str, choices=['f', 'm'], required=True,
-    #                     help='gender: f->female, m->male')
-    # parser.add_argument('--location', type=str, choices=['i', 'o'], required=True,
-    #                     help='location: i->inside, o->outside')
-
-    # args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
-    # return
-
-    # gender = args.gender
-    # location = args.location
-
-    path = "./assets/shoes2.fbx"
 
     cube = get_scene_object("Cube")
     if cube is not None:
         bpy.data.objects.remove(cube, do_unlink=True)
 
-    bpy.ops.import_scene.fbx(filepath=path)
-    #bpy.types.RenderSettings.film_transparent = True
+    config = ExecutionConfig.parseArgs()
+    exec(config)
+
+    os.makedirs("./result", exist_ok=True)
+    bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
+
+
+def exec(execConfig: ExecutionConfig):
+    bpy.ops.import_scene.fbx(filepath=execConfig.filePath)
 
     camera = get_scene_object("Camera")
 
-    angle_step = 30
-
-    yaw_list = range(0, 360, angle_step)
-    pitch_list = range(0, 181, angle_step)
+    yaw_list = range(0, 360, execConfig.angleStep)
+    pitch_list = range(0, 181, execConfig.angleStep)
     pairs = itertools.product(yaw_list, pitch_list)
 
-    radius = 10
-    transforms = [calc_camera_transform(radius, pitch, yaw) for pitch, yaw in pairs]
+    transforms = [calc_camera_transform(execConfig.cam_distance, pitch, yaw) for pitch, yaw in pairs]
     bpy.context.scene.render.film_transparent = True
 
     for index, transform in enumerate(transforms):
         print(f"\nX: {transform.alpha}, Y: {transform.beta} ({index + 1} / {len(transforms)})")
         render_with_angles(camera, transform)
-
-    os.mkdirs(path="./result", exist_ok=True)
-    bpy.ops.wm.save_mainfile(filepath="./result/created.blend")
 
 
 def render_with_angles(camera, transform):
