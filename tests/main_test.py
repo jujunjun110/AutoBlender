@@ -18,7 +18,7 @@ class TestMain(unittest.TestCase):
         root2 = math.sqrt(2)
         root3 = math.sqrt(3)
 
-        res = main.calc_camera_transform(4, 45, 30)
+        res = main.calc_camera_transform(4, math.radians(45), math.radians(30))
         self.assertAlmostEqual(res.pos_x, root2)
         self.assertAlmostEqual(res.pos_y, root2)
         self.assertAlmostEqual(res.pos_z, 2 * root3)

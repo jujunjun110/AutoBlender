@@ -10,15 +10,15 @@ from typing import Optional, cast, List
 
 
 class Transform:
-    def __init__(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, alpha, beta):
+    def __init__(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, pitch, yaw):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.pos_z = pos_z
         self.rot_x = rot_x
         self.rot_y = rot_y
         self.rot_z = rot_z
-        self.alpha = alpha
-        self.beta = beta
+        self.pitch = pitch
+        self.yaw = yaw
 
 
 class ExecutionConfig:
@@ -66,15 +66,15 @@ def exec(execConfig: ExecutionConfig):
 
     camera = get_scene_object("Camera")
 
-    yaw_list = range(0, 360, execConfig.angleStep)
-    pitch_list = range(0, 181, execConfig.angleStep)
+    yaw_list = [math.radians(x) for x in range(0, 360, execConfig.angleStep)]
+    pitch_list = [math.radians(x) for x in range(0, 181, execConfig.angleStep)]
     pairs = itertools.product(yaw_list, pitch_list)
 
     transforms = [calc_camera_transform(execConfig.cam_distance, pitch, yaw) for pitch, yaw in pairs]
     bpy.context.scene.render.film_transparent = True
 
     for index, transform in enumerate(transforms):
-        print(f"\nX: {transform.alpha}, Y: {transform.beta} ({index + 1} / {len(transforms)})")
+        print(f"\nX: {transform.pitch}, Y: {transform.yaw} ({index + 1} / {len(transforms)})")
         render_with_angles(camera, transform)
 
 
@@ -84,18 +84,18 @@ def render_with_angles(camera, transform):
 
     bpy.ops.render.render()
 
-    dist = f"./rendered/res_x{transform.alpha}_y{transform.beta}.png"
+    dist = f"./rendered/res_x{transform.pitch}_y{transform.yaw}.png"
     bpy.data.images['Render Result'].save_render(filepath=dist)
 
 
-def calc_camera_transform(radius: float, alpha: float, beta: float) -> Transform:
-    tmp_l = radius * math.sin(math.radians(beta))
+def calc_camera_transform(cam_distance: float, pitch: float, yaw: float) -> Transform:
+    tmp_l = cam_distance * math.sin(yaw)
 
-    pos_x = tmp_l * math.cos(math.radians(alpha))
-    pos_y = tmp_l * math.sin(math.radians(alpha))
-    pos_z = radius * math.cos(math.radians(beta))
+    pos_x = tmp_l * math.cos(pitch)
+    pos_y = tmp_l * math.sin(pitch)
+    pos_z = cam_distance * math.cos(yaw)
 
-    return Transform(pos_x, pos_y, pos_z, math.radians(beta), 0, math.radians(90 + alpha), alpha, beta)
+    return Transform(pos_x, pos_y, pos_z, yaw, 0, pitch + math.pi * 0.5, pitch, yaw)
 
 
 def get_scene_object(name: str) -> Optional[Object]:
