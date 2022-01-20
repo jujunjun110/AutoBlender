@@ -84,7 +84,10 @@ def render_with_angles(camera, transform):
 
     bpy.ops.render.render()
 
-    dist = f"./rendered/res_x{transform.pitch}_y{transform.yaw}.png"
+    y = int(math.degrees(transform.yaw))
+    p = int(math.degrees(transform.pitch))
+
+    dist = f"./rendered/res_x{p}_y{y}.png"
     bpy.data.images['Render Result'].save_render(filepath=dist)
 
 
