@@ -40,6 +40,7 @@ class ExecutionConfig:
         parser.add_argument('--camDistance', type=int,  required=False, help="camera distance")
 
         args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
+        print(args)
 
         angle_step = default_angle_step if args.angleStep is None else args.angleStep
         file_path = default_path if args.file is None else args.file
@@ -55,6 +56,7 @@ def main() -> None:
         bpy.data.objects.remove(cube, do_unlink=True)
 
     config = ExecutionConfig.parseArgs()
+
     exec(config)
 
     os.makedirs("./result", exist_ok=True)
