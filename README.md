@@ -9,6 +9,8 @@
 
 # 使い方
 
+下記のようにパラメータを指定してコマンドを実行
+
 `ANGLE_STEP=90 CAM_DISTANCE=10 FILE=./assets/default.fbx make run`
 
 ## パラメータ
